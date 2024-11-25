@@ -2,6 +2,7 @@ import express, { Application }  from "express";
 import userRouter from "../routes/usuarios";
 
 import cors from 'cors'
+import db from "../db/connection";
 
 
 class Server {
@@ -16,6 +17,9 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '8000';
         
+        // coneccion a bd
+        this.dbConnection();
+        
         //Middlewares
         this.middlewares();
 
@@ -23,6 +27,18 @@ class Server {
         this.routes();
 
     }
+
+    async dbConnection() {
+        try {
+            await db.authenticate();
+            console.log('Database online');
+
+        } catch (error: any) {
+            throw new Error( error );
+        }
+    }
+
+
 
     middlewares(){
 
